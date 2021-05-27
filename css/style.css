@@ -24,7 +24,7 @@ input[type="text"]{
    border-radius: 2px;
    margin-bottom: 30px;
 }
-.button{
+.buttonSubmit{
     height: 50px;
     width:300px;
     font-weight: bold;

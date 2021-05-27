@@ -1,8 +1,9 @@
-var button = document.querySelector('.button');
-var inputValue = document.querySelector('.inputValue');
+var button = document.querySelector('.buttonSubmit');
+var inputValue = document.querySelector('.inputvalue');
 var name = document.querySelector('.name');
 var desc = document.querySelector('.desc');
 var temp = document.querySelector('.temp');
+var userFormEl = document.querySelector('#formSubmit');
 
 // button.addEventListener('click', function () {
 //   fetch(
@@ -21,7 +22,7 @@ var getUserRepos = function (user) {
   var apiUrl =
     'https://api.openweathermap.org/data/2.5/forecast?q=' +
     inputValue.value +
-    '& appid=08dff11d3547ffd95ff0b6c1c1070466';
+    '&appid=08dff11d3547ffd95ff0b6c1c1070466';
   console.log(apiUrl);
   // make a get request to url
   fetch(apiUrl)
@@ -29,8 +30,12 @@ var getUserRepos = function (user) {
       // request was successful
       if (response.ok) {
         response.json().then(function (data) {
-          console.log(data);
-          //   displayRepos(data, user);
+          var nameValue = data['name'];
+          var temp = data['main']['temp'];
+          var descValue = data['weather'][0]['description'];
+          name.innerHTMl = nameValue;
+          temp.innerHTMl = tempValue;
+          desc.innerHTML = descValue;
         });
       } else {
         alert('Error: GitHub User Not Found');
@@ -38,7 +43,7 @@ var getUserRepos = function (user) {
     })
     .catch(function (error) {
       // Notice this `.catch()` getting chained onto the end of the `.then()` method
-      alert('Unable to connect to GitHub');
+      alert('Erong city name');
     });
 };
 
@@ -50,10 +55,10 @@ var formSubmitHandler = function (event) {
   console.log(username);
   if (username) {
     getUserRepos(username);
-    nameInputEl.value = '';
+    username.value = '';
   } else {
     alert('Please enter a GitHub username');
   }
   console.log(event);
 };
-button.addEventListener('submit', formSubmitHandler);
+userFormEl.addEventListener('submit', formSubmitHandler);
