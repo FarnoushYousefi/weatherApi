@@ -24,13 +24,13 @@ input[type="text"]{
    border-radius: 2px;
    margin-bottom: 30px;
 }
-input[type="submit"]{
+.button{
     height: 50px;
     width:300px;
     font-weight: bold;
     font-family:"Nuito",sans-serif ;
     font-size: 20px;
-    border:none;
+    border:2px solid black;
    border-radius: 2px;
 }
 .input{
