@@ -10,9 +10,9 @@ if (localStorage.getItem('cities')) {
   task = JSON.parse(localStorage.getItem('cities'));
   for (var i = 0; i < task.length; i++) {
     $('#weatherButton').append(
-      '<li class="btn btn-info btn-lg p-3 m-1" onClick="searchWeather(event)"> ' +
+      '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather(event)"> ' +
         task[i] +
-        '</li>'
+        '</button>'
     );
   }
 }
