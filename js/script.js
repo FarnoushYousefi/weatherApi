@@ -6,18 +6,23 @@ var tempEl = document.querySelector('.temp');
 var forcastEl = document.querySelector('.forcast');
 var userFormEl = document.querySelector('#formSubmit');
 var task = [];
-if (localStorage.getItem('cities')) {
-  task = JSON.parse(localStorage.getItem('cities'));
-  for (var i = 0; i < task.length; i++) {
-    $('#weatherButton').append(
-      '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather(event)"> ' +
-        task[i] +
-        '</button>'
-    );
+function renderHistory() {
+  $('#weatherButton').empty();
+  if (localStorage.getItem('cities')) {
+    task = JSON.parse(localStorage.getItem('cities'));
+    for (var i = 0; i < task.length; i++) {
+      $('#weatherButton').append(
+        '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather(event)"> ' +
+          task[i] +
+          '</button>'
+      );
+    }
   }
 }
 function searchWeather(event) {
-  event.stopPropagation();
+  // event.stopPropagation();
+
+  // console.log('evemt target', event.target);
   var cityText = event.target.innerHTML;
   var apiUrl =
     'https://api.openweathermap.org/data/2.5/forecast?q=' +
@@ -34,8 +39,6 @@ function searchWeather(event) {
 
           display(data);
         });
-      } else {
-        alert('Error: GitHub User Not Found');
       }
     })
     .catch(function (error) {
@@ -62,7 +65,7 @@ var getUserRepos = function (user) {
           display(data);
         });
       } else {
-        alert('Error: GitHub User Not Found');
+        alert('Error: CityName are Not Found');
       }
     })
     .catch(function (error) {
@@ -81,7 +84,7 @@ var formSubmitHandler = function (event) {
     getUserRepos(username);
     username.value = '';
   } else {
-    alert('Please enter a GitHub username');
+    // alert('Please enter a GitHub username');
   }
 };
 
@@ -119,9 +122,17 @@ var display = function (res) {
   }
   if (task.indexOf(nameValue) == -1) {
     task.push(nameValue);
+    localStorage.setItem('cities', JSON.stringify(task));
+    $('#weatherButton').append(
+      '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather()"> ' +
+        nameValue +
+        '</button>'
+    );
   }
 
-  localStorage.setItem('cities', JSON.stringify(task));
+  // renderHistory();
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
+
+renderHistory();
