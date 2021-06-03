@@ -12,18 +12,19 @@ function renderHistory() {
     task = JSON.parse(localStorage.getItem('cities'));
     for (var i = 0; i < task.length; i++) {
       $('#weatherButton').append(
-        '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather(event)"> ' +
+        '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2 search"> ' +
           task[i] +
           '</button>'
       );
     }
+    $('.search').click(function () {
+      searchWeather($(this).text());
+    });
   }
 }
-function searchWeather(event) {
-  // event.stopPropagation();
 
-  // console.log('evemt target', event.target);
-  var cityText = event.target.innerHTML;
+//  $('.search').on('click', searchWeather());
+function searchWeather(cityText) {
   var apiUrl =
     'https://api.openweathermap.org/data/2.5/forecast?q=' +
     cityText +
