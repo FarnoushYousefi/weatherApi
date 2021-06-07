@@ -5,25 +5,9 @@ var descEl = document.querySelector('.desc');
 var tempEl = document.querySelector('.temp');
 var forcastEl = document.querySelector('.forcast');
 var userFormEl = document.querySelector('#formSubmit');
-var task = [];
+
 var task = JSON.parse(localStorage.getItem('cities'));
 console.log(task);
-// function renderHistory() {
-//   $('#weatherButton').empty();
-//   if (localStorage.getItem('cities')) {
-//     task = JSON.parse(localStorage.getItem('cities'));
-//     for (var i = 0; i < task.length; i++) {
-//       $('#weatherButton').append(
-//         '<button class="btn btn-info btn-lg mt-2 mb-2 w-1oo p-2 search">' +
-//           task[i] +
-//           '</button>'
-//       );
-//     }
-//   }
-//   $('.serach').click(function () {
-//     searchWeather($(this).text());
-//   });
-// }
 
 //https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
 function renderHistory() {
@@ -43,9 +27,9 @@ function renderHistory() {
   }
 }
 
-//  $('.search').on('click', searchWeather());
 function searchWeather(cityText) {
   var newObj = {};
+  console.log(newObj);
   var apiUrl =
     'https://api.openweathermap.org/data/2.5/forecast?q=' +
     cityText +
@@ -61,7 +45,7 @@ function searchWeather(cityText) {
           .json()
           .then(function (data) {
             console.log(data);
-            newObj.cityName = data.city.name;
+            // newObj.cityName = data.city.name;
             newObj.cityName = data.city.name;
             newObj.temperature = data.list[0].main.temp;
             newObj.description = data.list[0].weather[0].description;
@@ -106,41 +90,15 @@ function searchWeather(cityText) {
     });
 }
 
-var getUserRepos = function (user) {
-  //format the github api url
-  var apiUrl =
-    'https://api.openweathermap.org/data/2.5/forecast?q=' +
-    inputValue.value +
-    '&appid=08dff11d3547ffd95ff0b6c1c1070466&units=imperial';
-  console.log(apiUrl);
-  // make a get request to url
-  fetch(apiUrl)
-    .then(function (response) {
-      // request was successful
-      if (response.ok) {
-        response.json().then(function (data) {
-          //   console.log(data);
-
-          display(data);
-        });
-      } else {
-        alert('Error: CityName are Not Found');
-      }
-    })
-    .catch(function (error) {
-      // Notice this `.catch()` getting chained onto the end of the `.then()` method
-      alert('Wrong city name');
-    });
-};
-
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
   // get value from input element
+  debugger;
   var username = inputValue.value.trim();
   console.log(username);
   if (username) {
-    getUserRepos(username);
+    searchWeather(username);
     username.value = '';
   } else {
     // alert('Please enter a GitHub username');
@@ -150,11 +108,14 @@ var formSubmitHandler = function (event) {
 var display = function (res) {
   console.log(res);
   $('.display').html('');
+  $('.localstorage').empty();
+  $('#weatherButton').empty();
   $('.forcast').html('');
   $('.display').append(`<div id=firstDisplay></div>`);
   var nameValue = res.cityName;
   var tempValue = res.temperature;
   var descValue = res.description;
+  console.log(res.fiveday[0].dt);
   var dateValue = res.fiveday[0].dt * 1000;
   var dateObj = new Date(dateValue);
   var finalDate = dateObj.toLocaleString();
@@ -198,14 +159,18 @@ var display = function (res) {
       ` <p id=dateValue>speed${res.fiveday[i].weather[0].wind_speed} miles/hour</p>`
     );
   }
-  if (task.indexOf(nameValue) == -1) {
-    task.push(nameValue);
-    localStorage.setItem('cities', JSON.stringify(task));
-    // $('#weatherButton').append(
-    //   '<button class="btn btn-info btn-lg mt-2 mb-2 w-100 p-2" onClick="searchWeather()"> ' +
-    //     nameValue +
-    //     '</button>'
-    // );
+
+  if (!task) {
+    localStorage.setItem('cities', JSON.stringify([nameValue]));
+    console.log(task);
+  } else {
+    console.log(task.indexOf(nameValue));
+    if (task.indexOf(nameValue) == -1) {
+      console.log(task);
+      task.push(nameValue);
+
+      localStorage.setItem('cities', JSON.stringify(task));
+    }
   }
 
   renderHistory();
