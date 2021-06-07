@@ -19,5 +19,9 @@ body{
     flex-direction: column;
     border:2px solid gray;
     justify-content: space-between;
-
+   
+}
+#icon{
+    max-width: 40px;
+    max-height: 40px;
 }
