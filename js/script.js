@@ -36,72 +36,73 @@ function searchWeather(cityText) {
     '&appid=08dff11d3547ffd95ff0b6c1c1070466&units=imperial';
   console.log(apiUrl);
   // make a get request to url
-  fetch(apiUrl)
-    .then(function (response) {
-      // console.log(response);
-      // request was successful
-      if (response.ok) {
-        response
-          .json()
-          .then(function (data) {
-            console.log(data);
-            // newObj.cityName = data.city.name;
-            newObj.cityName = data.city.name;
-            newObj.temperature = data.list[0].main.temp;
-            newObj.description = data.list[0].weather[0].description;
-            newObj.date = data.list[0].dt_txt;
-            newObj.icon = data.list[0].weather[0].icon;
-            newObj.humidity = data.list[0].main.humidity;
-            newObj.speed = data.list[0].wind.speed;
+  fetch(apiUrl).then(function (response) {
+    // console.log(response);
+    // request was successful
+    if (response.ok) {
+      response
+        .json()
+        .then(function (data) {
+          console.log(data);
+          // newObj.cityName = data.city.name;
+          newObj.cityName = data.city.name;
+          newObj.temperature = data.list[0].main.temp;
+          newObj.description = data.list[0].weather[0].description;
+          newObj.date = data.list[0].dt_txt;
+          newObj.icon = data.list[0].weather[0].icon;
+          newObj.humidity = data.list[0].main.humidity;
+          newObj.speed = data.list[0].wind.speed;
 
-            var lat = data.city.coord.lat;
-            var lon = data.city.coord.lon;
-            console.log('lat', lat);
-            console.log('lon', lon);
-            // display(newObj);
-            return fetch(
-              'https://api.openweathermap.org/data/2.5/onecall?lat=' +
-                lat +
-                '&lon=' +
-                lon +
-                '&appid=08dff11d3547ffd95ff0b6c1c1070466&timezone_offset=1'
-            );
-            // https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
-          })
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            console.log(data);
-            if (data.length === 0) {
-              console.log('there is no data');
-            } else {
-              var uv = data.current.uvi;
-              newObj.fiveday = data.daily;
-              newObj.uv = uv;
-              display(newObj);
-            }
-          });
-      }
-    })
-    .catch(function (error) {
-      // Notice this `.catch()` getting chained onto the end of the `.then()` method
-      alert('Erong city name');
-    });
+          var lat = data.city.coord.lat;
+          var lon = data.city.coord.lon;
+          console.log('lat', lat);
+          console.log('lon', lon);
+          // display(newObj);
+          return fetch(
+            'https://api.openweathermap.org/data/2.5/onecall?lat=' +
+              lat +
+              '&lon=' +
+              lon +
+              '&appid=08dff11d3547ffd95ff0b6c1c1070466&timezone_offset=1'
+          );
+          // https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+        })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          if (data.length === 0) {
+            console.log('there is no data');
+          } else {
+            var uv = data.current.uvi;
+            newObj.fiveday = data.daily;
+            newObj.uv = uv;
+            display(newObj);
+          }
+        });
+    } else {
+      alert(response.statusText);
+    }
+  });
+  //     .catch(function (error) {
+  //       // Notice this `.catch()` getting chained onto the end of the `.then()` method
+  //       alert('wrong city name');
+  //     });
 }
 
 var formSubmitHandler = function (event) {
   event.preventDefault();
 
   // get value from input element
-  debugger;
+
   var username = inputValue.value.trim();
   console.log(username);
   if (username) {
     searchWeather(username);
     username.value = '';
   } else {
-    // alert('Please enter a GitHub username');
+    alert('Please enter a correct City');
   }
 };
 
@@ -177,5 +178,6 @@ var display = function (res) {
 };
 
 userFormEl.addEventListener('submit', formSubmitHandler);
+// userFormEl.on('submit', '.buttonSubmit', formSubmitHandler);
 //page the load
 renderHistory();
